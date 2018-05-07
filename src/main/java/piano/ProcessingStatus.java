@@ -1,4 +1,4 @@
-package hammer;
+package piano;
 
 public enum ProcessingStatus {
 
