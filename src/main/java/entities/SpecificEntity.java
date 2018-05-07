@@ -1,4 +1,4 @@
-package examples;
+package entities;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,13 +15,19 @@ public class SpecificEntity {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    public String id;
 
-    @Column private String value;
-
-    @Column private Integer number;
+    @Column
+    private String value;
+    @Column
+    private Integer number;
 
     public SpecificEntity() {
+    }
+
+    public SpecificEntity(String value, Integer number) {
+        this.value = value;
+        this.number = number;
     }
 
     public String getId() {

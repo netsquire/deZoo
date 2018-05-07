@@ -12,7 +12,7 @@ import piano.Task;
 
 import java.util.List;
 
-public class Application {
+public class OldApplication {
 
     private static Piano piano = Piano.build();
     private static Dispatcher dispatcher = new Dispatcher();
@@ -30,7 +30,7 @@ public class Application {
             throw new ExceptionInInitializerError(ex);
         }
 
-        Application app = new Application();
+        OldApplication app = new OldApplication();
         System.out.println(app.addSpecificEntity("Entity1", 33));
         System.out.println(app.addSpecificEntity("Entity2", 133));
         System.out.println(app.addSpecificEntity("Entity3", 233));
