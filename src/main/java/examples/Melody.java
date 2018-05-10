@@ -15,6 +15,14 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Foreground tasks: have id as String, mentioned in order setup enumeration
+ * natural order - as it is listed
+ * explicit - as it is mentioned in task order
+ *
+ * background tasks: linked to type (or class), with operation set - any action on it triggers execution of task
+ *
+ */
 @Component
 @ComponentScan({"entities", "piano"})
 public class Melody {
@@ -86,6 +94,8 @@ public class Melody {
         task.setBefore(jobBeforeCurrent);
         task.setAfter(jobAfterCurrent);
         piano.addTask(task);
+
+        piano.setOrder("initial", "second", "first", "last");
 
         LOG.info("=== End composition ===");
     }

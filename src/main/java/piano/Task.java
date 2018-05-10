@@ -5,19 +5,20 @@ public class Task {
     private Job job;
     private int number;
     private String id;
+    private int order;
 
     private Job before;
     private Job after;
 
-    Task(Job job, int number, String id) {
+    Task(Job job, int order, String id) {
         this.job = job;
-        this.number = number;
+        this.order = order;
         this.id = id;
     }
 
-    public Task(Job job, int number, String id, Job before, Job after) {
+    public Task(Job job, int order, String id, Job before, Job after) {
         this.job = job;
-        this.number = number;
+        this.order = order;
         this.id = id;
         this.before = before;
         this.after = after;
@@ -67,4 +68,11 @@ public class Task {
             before = job;
     }
 
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
 }

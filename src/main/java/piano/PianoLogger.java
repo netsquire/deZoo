@@ -10,7 +10,11 @@ public class PianoLogger {
      */
     public static void logExecution(String id) {
         // log execution
+        // FILE, DB, MEMORY, etc...
 
         // in no more tasks to execute - shutdown executeService
+    }
+
+    public static void reportEmptyTask(String id) {
     }
 }

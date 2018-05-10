@@ -37,6 +37,7 @@ public class EntityEvent {
     }
 
     public enum Operation {
+        DEFAULT("default"),
         CREATE("create"),
         SAVE("save"),
         UPDATE("update"),
