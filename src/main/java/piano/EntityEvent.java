@@ -1,6 +1,6 @@
 package piano;
 
-public class Event {
+public class EntityEvent {
 
     private String id;
     private String typeReference;
@@ -30,7 +30,7 @@ public class Event {
         this.operation = operation;
     }
 
-    public Event(String id, String typeReference, Operation operation) {
+    public EntityEvent(String id, String typeReference, Operation operation) {
         this.id = id;
         this.typeReference = typeReference;
         this.operation = operation;

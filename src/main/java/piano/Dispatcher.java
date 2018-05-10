@@ -6,42 +6,50 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Configuration
 public class Dispatcher {
 
     @Autowired
-    private Map<String, LinkedBlockingQueue<Event>> eventQueues; // = new HashMap<>();
+    private Map<String, LinkedBlockingQueue<EntityEvent>> eventQueues;
     private Map<String, Thread> threads = new HashMap<>();
 
+    //ExecutorService threadPool = Executors.newFixedThreadPool(5);
+
     @Bean
-    Map<String, LinkedBlockingQueue<Event>> eventQueues(){
+    Map<String, LinkedBlockingQueue<EntityEvent>> eventQueues(){
         return new HashMap<>();
     }
 
     @Bean
-    private LinkedBlockingQueue<Event> linkedBlockingQueue(){
+    LinkedBlockingQueue<EntityEvent> linkedBlockingQueue(){
         return new LinkedBlockingQueue<>();
     }
 
-    public void addResponsableforType(String typeReference, Event event) {
+    public void addResponsableforType(String typeReference, EntityEvent event) {
         eventQueues.get(typeReference).add(event);
     }
 
-    public void notify(String typeName, String id, Event.Operation operation) {
+    public void notify(String typeName, String id, EntityEvent.Operation operation) {
         getOrCreate(eventQueues.get(typeName))
-                .add(new Event(typeName, id, operation));
+                .add(new EntityEvent(typeName, id, operation));
     }
 
-    private LinkedBlockingQueue<Event> getOrCreate(LinkedBlockingQueue<Event> queue){
+    public void notify(EntityEvent event) {
+        notify(event.getTypeReference(), event.getId(), event.getOperation());
+    }
+
+    private LinkedBlockingQueue<EntityEvent> getOrCreate(LinkedBlockingQueue<EntityEvent> queue){
         if (queue == null) {
             queue = linkedBlockingQueue();
         }
         return queue;
     }
 
-    public Map<String, LinkedBlockingQueue<Event>> getEventQueues() {
+    public Map<String, LinkedBlockingQueue<EntityEvent>> getEventQueues() {
         return eventQueues;
     }
 
@@ -54,16 +62,14 @@ public class Dispatcher {
     }
 
     class EventConsumer implements Runnable {
-
-        LinkedBlockingQueue<Event> eventQueue;
-
-        EventConsumer(LinkedBlockingQueue<Event> eventQueue) {
+        LinkedBlockingQueue<EntityEvent> eventQueue;
+        EventConsumer(LinkedBlockingQueue<EntityEvent> eventQueue) {
             this.eventQueue = eventQueue;
         }
 
         @Override
         public void run() {
-            Event event;
+            EntityEvent event;
             try {
                 while ((event = eventQueue.take()).getOperation() != null) {
                     System.out.println("Processing for event: " + event.getId() + " of type=" + event.getTypeReference());
