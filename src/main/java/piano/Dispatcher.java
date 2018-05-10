@@ -15,9 +15,9 @@ public class Dispatcher {
 
     @Autowired
     private Map<String, LinkedBlockingQueue<EntityEvent>> eventQueues;
-    private Map<String, Thread> threads = new HashMap<>();
+    private Map<String, Task> tasks = new HashMap<>();
 
-    //ExecutorService threadPool = Executors.newFixedThreadPool(5);
+    ExecutorService executorService = Executors.newFixedThreadPool(5);
 
     @Bean
     Map<String, LinkedBlockingQueue<EntityEvent>> eventQueues(){
@@ -36,6 +36,14 @@ public class Dispatcher {
     public void notify(String typeName, String id, EntityEvent.Operation operation) {
         getOrCreate(eventQueues.get(typeName))
                 .add(new EntityEvent(typeName, id, operation));
+
+        executorService.submit(() -> {
+            Task task = tasks.get(typeName);
+            task.getBefore().executeJob();
+            task.getJob().executeJob();
+            task.getAfter().executeJob();
+            PianoLogger.logExecution(id);
+        });
     }
 
     public void notify(EntityEvent event) {
@@ -53,13 +61,13 @@ public class Dispatcher {
         return eventQueues;
     }
 
-    public void play() {
+/*    public void play() {
         for (String type : eventQueues.keySet()) {
             Thread t = new Thread(new EventConsumer(eventQueues.get(type)));
-            threads.put(type, t);
+            tasks.put(type, t);
             t.start();
         }
-    }
+    }*/
 
     class EventConsumer implements Runnable {
         LinkedBlockingQueue<EntityEvent> eventQueue;
