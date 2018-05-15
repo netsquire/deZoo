@@ -1,3 +1,5 @@
+package up;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,10 @@ import piano.Piano;
 
 import static org.springframework.boot.SpringApplication.run;
 
-@SpringBootApplication
+//@SpringBootApplication
 @ComponentScan({"examples", "piano"})
-@EntityScan("entities")
-@EnableJpaRepositories("entities")
+@EntityScan("piano/entities")
+@EnableJpaRepositories("piano/entities")
 public class PianoApplication {
 
     private static final Logger log = LoggerFactory.getLogger(PianoApplication.class);

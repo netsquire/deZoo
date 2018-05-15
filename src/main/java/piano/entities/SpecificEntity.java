@@ -1,4 +1,4 @@
-package entities;
+package piano.entities;
 
 import org.hibernate.annotations.GenericGenerator;
 

@@ -1,7 +1,7 @@
 package piano;
 
-import entities.SpecificEntity;
-import entities.SpecificEntityRepository;
+import piano.entities.SpecificEntity;
+import piano.entities.SpecificEntityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,12 @@ import java.util.Optional;
 /**
  * TODO:
  *
- *  1)put all entities.repositories here
+ *  1)put all piano.entities.repositories here
  *
  *  2) cover it with Introspection and Reflection. AspectJ ?
  */
 @Component
-@ComponentScan("entities")
+@ComponentScan("piano/entities")
 public class StoreService <T extends Serializable>{
 
     private static final Logger LOG = LoggerFactory.getLogger(StoreService.class);
@@ -28,14 +28,13 @@ public class StoreService <T extends Serializable>{
     private SpecificEntityRepository specificEntityRepository;
 
     @Autowired
-    private Dispatcher dispatcher;
+    private Piano piano;
 
     public void save(Object objectToStore){
         if (objectToStore instanceof SpecificEntity) {
             SpecificEntity store = (SpecificEntity) objectToStore;
             specificEntityRepository.save(store);
-            EntityEvent entityEvent = new EntityEvent(SpecificEntity.class.getTypeName(), store.getId(), EntityEvent.Operation.SAVE);
-            dispatcher.notify(entityEvent);
+            piano.trigger(SpecificEntity.class.getTypeName(), store.getId(), EntityEvent.Operation.SAVE);
         }
     }
 

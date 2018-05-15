@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -30,8 +31,8 @@ public class Piano {
     private static AtomicInteger taskCounter = new AtomicInteger(0);
     private ExecutorService executorService = Executors.newFixedThreadPool(5);
 
-    private void trigger(String typeName, String id, EntityEvent.Operation operation) {
-        executorService.submit(() -> {
+    public Future trigger(String typeName, String id, EntityEvent.Operation operation) {
+        return executorService.submit(() -> {
             taskFlow.get(typeName).get(operation).forEach(this::executeTask);
             PianoLogger.logExecution(id);
             taskCounter.incrementAndGet();
@@ -70,8 +71,9 @@ public class Piano {
         putTask(new Task(job, nextTaskNumber(), UUID.randomUUID().toString()));
     }
 
-    public void addJob(String id, Job job) {
+    public Piano addJob(String id, Job job) {
         putTask(new Task(job, nextTaskNumber(), id));
+        return this;
     }
 
     public void addJob(String id, Job job, int order) {

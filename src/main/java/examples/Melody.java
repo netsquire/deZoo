@@ -1,6 +1,6 @@
 package examples;
 
-import entities.SpecificEntity;
+import piano.entities.SpecificEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +8,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import piano.Job;
 import piano.Piano;
+import piano.PianoTask;
 import piano.StoreService;
 import piano.Task;
 
 import java.io.Serializable;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -24,7 +24,7 @@ import java.util.UUID;
  *
  */
 @Component
-@ComponentScan({"entities", "piano"})
+@ComponentScan({"piano/entities/postgresql", "piano"})
 public class Melody {
 
     private static final Logger LOG = LoggerFactory.getLogger(Melody.class);
@@ -57,15 +57,11 @@ public class Melody {
                         .orElse(new SpecificEntity("SpecificEntity not found", 0));
                 System.out.println("FOUND VALUE: " + specificEntity.getValue());
             }
-        });
-
-        piano.addJob("second", new Job() {
+        }).addJob("second", new Job() {
             public void executeJob() {
                 System.out.println("Second task executed.");
             }
-        });
-
-        piano.addJob("last", new Job() {
+        }).addJob("last", new Job() {
             @Override
             public void executeJob() {
                 System.out.println("Last task executed.");
@@ -96,9 +92,11 @@ public class Melody {
         piano.addTask(task);
 
         piano.setOrder("initial", "second", "first", "last");
-
         LOG.info("=== End composition ===");
     }
+
+    @PianoTask(entity = SpecificEntity.class, name = "EntityName")
+    void method(){}
 
     void dumpAllSpecificEntities() {
         System.out.println("ALL SpecificEntities: ");
