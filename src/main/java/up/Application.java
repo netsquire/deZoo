@@ -1,6 +1,7 @@
 package up;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -40,31 +41,31 @@ public class Application {
         };
     }
 
-    public Person savePersonDetails() {
+    private Person savePersonDetails() {
         Person person = new Person();
         person.setName("Chandra Shekhar Goka");
         person.setCity("Hyderabad");
         return personService.savePerson(person);
     }
 
-    public Department saveDepartmentDetails() {
+    private Department saveDepartmentDetails() {
         Department dept = new Department();
-        dept.setName("IT");
+        //dept.setName("IT");
+        dept.setName(UUID.randomUUID().toString());
         return deptService.saveDepartment(dept);
     }
 
     public void getPersonDetails() {
-
     }
 
     private void getAllPerson() {
-        List persons = personService.getAllPersons();
+        List<Person> persons = personService.getAllPersons();
         persons.forEach(System.out::println);
     }
 
     private void getDepartments() {
-        List depts = deptService.getAllDepartment();
-        depts.forEach(System.out::println);
+        List<Department> departmentList = deptService.getAllDepartment();
+        departmentList.forEach(System.out::println);
     }
 
 }

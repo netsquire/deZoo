@@ -9,19 +9,16 @@ import org.springframework.stereotype.Service;
 import piano.model.department.Department;
 import piano.repository.department.DepartmentRepository;
 
-import javax.persistence.PersistenceContext;
-
 @Service
 @Component
 @ComponentScan({"piano.repository.department"})
 public class DepartmentService {
 
     @Autowired
-    //@PersistenceContext(name="department")
     private DepartmentRepository departmentRepository;
 
-    public List getAllDepartment() {
-        return (List) departmentRepository.findAll();
+    public List<Department> getAllDepartment() {
+        return (List<Department>) departmentRepository.findAll();
     }
 
     public Department saveDepartment(Department dept) {
