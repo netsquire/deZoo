@@ -1,19 +1,9 @@
-package examples;
+package piano;
 
-import piano.entities.SpecificEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
-import piano.Job;
-import piano.Piano;
-import piano.PianoTask;
-import piano.StoreService;
-import piano.Task;
-
-import java.io.Serializable;
-import java.util.UUID;
 
 /**
  * Foreground tasks: have id as String, mentioned in order setup enumeration
@@ -24,18 +14,14 @@ import java.util.UUID;
  *
  */
 @Component
-@ComponentScan({"piano/entities/postgresql", "piano"})
-public class Melody {
+class Melody {
 
     private static final Logger LOG = LoggerFactory.getLogger(Melody.class);
 
     @Autowired
-    private StoreService<Serializable> storeService;
-
-    @Autowired
     private Piano piano;
 
-    public void compose() {
+    void compose() {
 
         LOG.info("=== Start composition ===");
         if (piano == null) {
@@ -43,7 +29,6 @@ public class Melody {
             System.out.println("--- Piano wasn't instansiated. ---");
             System.out.println("----------------------------------");
         }
-        storeService.save(new SpecificEntity(UUID.randomUUID().toString(), 4445));
 
         piano.addJob("initial", new Job() {
             public void executeJob() {
@@ -51,11 +36,6 @@ public class Melody {
                 String givenId = "5fd09568-bb80-4272-8fa0-2c3c72e30d4d";
                 System.out.println("givenId = " + givenId);
                 LOG.info("(Melody) Given ID value = ", givenId);
-                storeService.save(new SpecificEntity(UUID.randomUUID().toString(), 4445));
-
-                SpecificEntity specificEntity = storeService.findById("84163a90-59a1-499b-8084-d2e615eb3a1e")
-                        .orElse(new SpecificEntity("SpecificEntity not found", 0));
-                System.out.println("FOUND VALUE: " + specificEntity.getValue());
             }
         }).addJob("second", new Job() {
             public void executeJob() {
@@ -95,17 +75,4 @@ public class Melody {
         LOG.info("=== End composition ===");
     }
 
-    @PianoTask(entity = SpecificEntity.class, name = "EntityName")
-    void method(){}
-
-    void dumpAllSpecificEntities() {
-        System.out.println("ALL SpecificEntities: ");
-        Iterable<SpecificEntity> allSpecific = storeService.findAll();
-        allSpecific.forEach(s -> {
-            System.out.println(s.getId());
-            System.out.println(s.getValue());
-            System.out.println(s.getNumber());
-            System.out.println();
-        });
-    }
 }

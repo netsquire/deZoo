@@ -1,7 +1,5 @@
 package piano.model.person;
 
-import org.springframework.context.annotation.Lazy;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,14 +15,11 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column //(name = "name")
     private String name;
 
-    @Column(name = "city")
+    @Column //(name = "city")
     private String city;
-
-    public Person() {
-        super();
-    }
 
     public Long getId() {
         return id;
